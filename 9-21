@@ -1,0 +1,28 @@
+#define PIN_LED 7
+unsigned int count, toggle;
+
+void setup() {
+  pinMode(PIN_LED, OUTPUT);
+  Serial.begin(1152200);
+  while(!Serial){
+    ;
+  }
+  count = toggle = 0;
+  digitalWrite(PIN_LED, toggle);
+  delay(1000);
+  toggle = 1;
+  digitalWrite(PIN_LED, toggle);
+  while(1){
+    toggle=count%2;
+    digitalWrite(PIN_LED, toggle);
+    delay(300);
+    count += 1;
+    if(count==12){
+      break;
+    }
+  }
+
+}
+
+void loop() {
+}
