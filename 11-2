@@ -15,7 +15,7 @@
 #define LOOP_INTERVAL 50   // Loop Interval (unit: msec)
 #define _EMA_ALPHA 0.5    // EMA weight of new sample (range: 0 to 1)
 
-float  dist_ema; // unit: mm
+float  dist_ema,dist_prev; // unit: mm
 
 Servo myservo;
 unsigned long last_loop_time;   // unit: msec
@@ -31,6 +31,7 @@ void setup()
 
 void loop()
 {
+  
   unsigned long time_curr = millis();
   int a_value, duty;
 
@@ -44,6 +45,12 @@ void loop()
   // Read IR Sensor value !!!
   // Convert IR sensor value into distance !!!
   int dist = (6762.0/(a_value-9)-4.0)*10.0;
+  if(dist<DIST_MIN){
+    dist=dist_prev
+  }
+  else if(dist>DIST_MAX){
+    dist=dist_prev;;
+  }
   dist_ema = dist* _EMA_ALPHA +dist_ema*(1-_EMA_ALPHA);
   // we need distance range filter here !!
   if (dist_ema>DIST_MIN && dist_ema<DIST_MAX){
@@ -56,7 +63,7 @@ void loop()
   }
   // we need EMA filter here !!!
     dist_ema = dist* _EMA_ALPHA +dist_ema*(1-_EMA_ALPHA);
-
+  dist_prev=dist;
 
   // print IR sensor value, distnace, duty !!!
   Serial.print("MIN:");   Serial.print(DIST_MIN);
@@ -68,3 +75,4 @@ void loop()
   Serial.println("");
 
 }
+
