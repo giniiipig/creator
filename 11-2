@@ -46,7 +46,7 @@ void loop()
   // Convert IR sensor value into distance !!!
   int dist = (6762.0/(a_value-9)-4.0)*10.0;
   if(dist<DIST_MIN){
-    dist=dist_prev
+    dist=dist_prev;
   }
   else if(dist>DIST_MAX){
     dist=dist_prev;;
